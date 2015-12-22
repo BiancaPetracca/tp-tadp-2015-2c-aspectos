@@ -63,12 +63,13 @@ class Regexp
     valid_constants.map{ |c| Object.const_get(c) }
   end
 end
-
+###################### PARCIAL #########################
 class Array
   include OriginSource
 
   def get_origin
-    throw ArgumentError('origen vacio') if invalid?
+    throw ArgumentError('el conjunto está vacío') if empty?
+    throw ArgumentError('deben ser modulos con o sin una clase') if invalid?
     # si llegue aca es porque lo que tiene el array son si o si clases o modulos, no hay expresiones regulares en el array
     # el includes_all siempre va a devolver una clase, porque son las unicas que van a incluir a los modulos
     /.*/.get_origin.select{|c| includes_all? c }
@@ -77,13 +78,15 @@ class Array
 
   # para lo que haya en el array, si es una clase, "something" debe ser ella, y si es un modulo, entonces la clase tiene que incluirlo
   # en cambio, si ese something es un modulo, nunca va a pasar que el modulo incluya a la clase, si es que hay una.
-  # si estoy seleccionando todas las clases que cumplen con eso
+  # si estoy seleccionando a la totalidad tambien, cualquiera de las clases va a cumplir que sus ancestors incluyen a los modulos
   def includes_all? something
     all?{|module_or_class| something.is_a? module_or_class or something.ancestors.include? module_or_class}
   end
 
   def invalid?
-    empty? or select{|m| m.is_a? Module or m.is_a? Class}.size == 1 or select{|c| c.is_a? Class}.size > 1 or any?{|m| !m.is_a? Class and
+    select{|m| m.is_a? Module or m.is_a? Class}.size == 1 or select{|c| c.is_a? Class}.size > 1 or any?{|m| !m.is_a? Class and
     !m.is_a? Module}
   end
 end
+
+########################### PARCIAL #########################
