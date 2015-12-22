@@ -7,12 +7,16 @@ describe 'Origen' do
   let(:an_instance) { Object.new }
   let(:a_module) { MockModule }
   let(:a_class) { MockClass }
-
+  Klasse = new Class
   describe 'get_origenes' do
 
-    context 'when get_origenes is sended to a concrete Origen' do
+    context 'when get_origenes is sent to a concrete Origen' do
       it do
         expect(an_instance.get_origin).to be an_instance
+      end
+
+      it do
+        expect(a_class.is_a? Module).to be true
       end
 
       it do
@@ -24,7 +28,7 @@ describe 'Origen' do
       end
     end
 
-    context 'when get_origenes is sended to a Regex Origen' do
+    context 'when get_origenes is sent to a Regex Origen' do
       it do
         expect(/.*/.get_origin.size).to eq(Object.constants.select {|const| Object.const_get(const).is_a? Module }.size)
       end
@@ -113,7 +117,7 @@ describe 'Origen' do
 
   describe '#where' do
 
-    context 'when no method satisfy all conditions' do
+    context 'when no methods satisfy all conditions' do
       it do
         expect(MockClass.where(names(/zzzz/))).to eql []
       end
